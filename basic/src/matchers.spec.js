@@ -7,7 +7,7 @@ test('', async () => {
     },
   };
 
-  // promises/async
+  // promises
   const res = new Promise(resolve => {
     resolve(a);
   });
@@ -55,7 +55,7 @@ test('', async () => {
   expect(cb).toHaveBeenCalledWith('Data');
 });
 
-// Waiting with the Done Callback for Async actions
+// Waiting with the Done Callback for Async actions/Callback functions
 test('', done => {
   // needs add done param
   // this is going to pass since 'Jest is synchronous test runner'
