@@ -58,7 +58,7 @@ test('', async () => {
 // Waiting with the Done Callback for Async actions/Callback functions
 test('', done => {
   // needs add done param
-  // this is going to pass since 'Jest is synchronous test runner'
+  // this is NOT going to pass since 'Jest is synchronous test runner'
   // this should fail the test unless call with 'done' Callback
   setTimeout(() => {
     expect(1).toBe(1);
