@@ -1,13 +1,36 @@
+// render method creates a virtual DOM for whatever JSX we pass as an argument - App
+// we want to render App component
+
+// screen is global object to access virtual DOM
+// We are going to use global object Screen that has access to virtual DOM created by render method.
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import App from './App';
 
-describe('App component', () => {
-  it('renders & has heading one', () => {
+describe('when rendering App component', () => {
+  beforeEach(() => {
     render(<App />);
-    const headingOne = screen.getByRole('heading', { name: 'Testing' });
-    expect(headingOne).toBeInTheDocument();
+  });
+
+  test('Should render the App component without crashing', () => {
+    screen.debug();
+  });
+
+  test('Should select the Children prop that is being passed to the CustomInput component', () => {
+    expect(screen.getByText('Input:')).toBeInTheDocument();
+  });
+
+  test('Should select Input element by its role', () => {
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+  });
+
+  test('Should select a Label element by its text', () => {
+    expect(screen.getByLabelText('Input:')).toBeInTheDocument();
+  });
+
+  test('Should select a Label element by its placeholder text', () => {
+    expect(screen.getByPlaceholderText('enter text')).toBeInTheDocument();
   });
 });
 
