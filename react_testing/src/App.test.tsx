@@ -3,14 +3,25 @@
 
 // screen is global object to access virtual DOM
 // We are going to use global object Screen that has access to virtual DOM created by render method.
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import App from './App';
 
+import { mocked } from 'ts-jest/utils';
+import { getUser } from './get-user';
+
+// mocking axios instance
+// if axios api fails, all our tests fails as well when getting data from the server
+// avoiding making api calls to the server, saves time & money
+jest.mock('./get-user');
+const mockGetUser = mocked(getUser, true); // true is make deep mock
+
 describe('when rendering App component', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     render(<App />);
+    // When in need to wait for any period of time you can use 'waitFor'
+    await waitFor(() => expect(mockGetUser).toHaveBeenCalled());
   });
 
   test('Should render the App component without crashing', () => {
@@ -31,6 +42,22 @@ describe('when rendering App component', () => {
 
   test('Should select a Label element by its placeholder text', () => {
     expect(screen.getByPlaceholderText('enter text')).toBeInTheDocument();
+  });
+
+  test('Should not find the role `whatever` in our component', () => {
+    expect(screen.queryByRole('whatever')).toBeNull();
+  });
+});
+
+describe('when the component fetches user successfully', () => {
+  beforeEach(() => {
+    // clear the mock/promise
+    mockGetUser.mockClear();
+  });
+
+  test('Should call getUser once', async () => {
+    render(<App />);
+    await waitFor(() => expect(mockGetUser).toHaveBeenCalledTimes(1));
   });
 });
 
